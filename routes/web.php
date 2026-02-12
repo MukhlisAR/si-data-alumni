@@ -27,5 +27,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/alumni', [AdminController::class, 'alumniIndex'])->name('alumni.index'); // Lihat Daftar
     Route::get('/alumni/{id}', [AdminController::class, 'alumniShow'])->name('alumni.show'); // Lihat Detail
     Route::patch('/alumni/{id}/verify', [AdminController::class, 'verify'])->name('alumni.verify'); // Aksi Verifikasi
+
+    // Fitur Berita
+    Route::resource('news', \App\Http\Controllers\AdminNewsController::class);
 });
 require __DIR__.'/auth.php';

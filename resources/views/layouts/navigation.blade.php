@@ -13,6 +13,8 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
     
+<div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+    
     @if(Auth::user()->role === 'admin')
         <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
             {{ __('Dashboard Admin') }}
@@ -20,6 +22,10 @@
 
         <x-nav-link :href="route('admin.alumni.index')" :active="request()->routeIs('admin.alumni.*')">
             {{ __('Kelola Alumni') }}
+        </x-nav-link>
+
+        <x-nav-link :href="route('admin.news.index')" :active="request()->routeIs('admin.news.*')">
+            {{ __('Kelola Berita') }}
         </x-nav-link>
     @endif
 
@@ -31,7 +37,10 @@
         <x-nav-link :href="route('alumni.biodata')" :active="request()->routeIs('alumni.biodata')">
             {{ __('Biodata Saya') }}
         </x-nav-link>
-    @endif
+        
+        @endif
+
+</div>
 
 </div>
             </div>
