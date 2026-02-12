@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,5 +17,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
+// --- GROUP ROUTE ADMIN ---
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    
+    // Dashboard Admin
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+    
+    // Fitur Manajemen Alumni
+    Route::get('/alumni', [AdminController::class, 'alumniIndex'])->name('alumni.index'); // Lihat Daftar
+    Route::get('/alumni/{id}', [AdminController::class, 'alumniShow'])->name('alumni.show'); // Lihat Detail
+    Route::patch('/alumni/{id}/verify', [AdminController::class, 'verify'])->name('alumni.verify'); // Aksi Verifikasi
+});
 require __DIR__.'/auth.php';

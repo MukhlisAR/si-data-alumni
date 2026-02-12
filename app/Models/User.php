@@ -17,11 +17,12 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+  protected $fillable = [
+    'name',
+    'email',
+    'password',
+    'role', // Tambahkan ini agar bisa diisi saat register/seeding
+];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -45,4 +46,8 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function alumni()
+{
+    return $this->hasOne(Alumni::class);
+}
 }
