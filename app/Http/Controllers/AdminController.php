@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Alumni;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminController extends Controller
 {
@@ -43,5 +44,33 @@ class AdminController extends Controller
         $alumni->update(['status' => $request->status]);
 
         return redirect()->back()->with('success', 'Status alumni berhasil diperbarui!');
+    }
+    // === TAMBAHKAN FUNGSI CETAK INI ===
+    public function cetakPdf(Request $request)
+    {
+        // Ambil filter tahun dari request (jika ada)
+        $year = $request->input('year');
+
+        // Siapkan Query: Ambil alumni yang statusnya 'verified' beserta data user-nya
+        $query = Alumni::with('user')->where('status', 'verified');
+
+        // Jika ada filter tahun, tambahkan kondisi where
+        if ($year) {
+            $query->where('graduation_year', $year);
+        }
+
+        // --- BAGIAN PERBAIKAN ---
+        // Kita ambil dulu datanya (get), BARU kita urutkan berdasarkan nama user (sortBy)
+        // Cara ini aman karena 'name' ada di tabel relasi (users), bukan di tabel alumni.
+        $alumnis = $query->get()->sortBy(function($alumni) {
+            return $alumni->user->name;
+        });
+        // ------------------------
+
+        // Load view khusus PDF
+        $pdf = Pdf::loadView('admin.alumni.pdf', compact('alumnis', 'year'));
+
+        // Download file PDF
+        return $pdf->stream('Buku-Wisuda-' . ($year ?? 'Semua') . '.pdf');
     }
 }

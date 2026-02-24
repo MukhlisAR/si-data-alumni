@@ -22,6 +22,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     
     // Dashboard Admin
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+
+     // Route Cetak Buku Wisuda (PDF)
+    Route::get('/alumni/cetak', [AdminController::class, 'cetakPdf'])->name('alumni.cetak');
     
     // Fitur Manajemen Alumni
     Route::get('/alumni', [AdminController::class, 'alumniIndex'])->name('alumni.index'); // Lihat Daftar
@@ -30,5 +33,12 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     // Fitur Berita
     Route::resource('news', \App\Http\Controllers\AdminNewsController::class);
+
+
+    // Data Master (Jurusan)
+    Route::get('/majors', [\App\Http\Controllers\AdminMajorController::class, 'index'])->name('majors.index');
+    Route::post('/majors', [\App\Http\Controllers\AdminMajorController::class, 'store'])->name('majors.store');
+    Route::delete('/majors/{id}', [\App\Http\Controllers\AdminMajorController::class, 'destroy'])->name('majors.destroy');
+
 });
 require __DIR__.'/auth.php';

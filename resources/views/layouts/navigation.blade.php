@@ -27,6 +27,10 @@
         <x-nav-link :href="route('admin.news.index')" :active="request()->routeIs('admin.news.*')">
             {{ __('Kelola Berita') }}
         </x-nav-link>
+
+        <x-nav-link :href="route('admin.majors.index')" :active="request()->routeIs('admin.majors.*')">
+            {{ __('Data Master') }}
+        </x-nav-link>
     @endif
 
     @if(Auth::user()->role === 'alumni')
