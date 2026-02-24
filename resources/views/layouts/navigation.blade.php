@@ -31,6 +31,10 @@
         <x-nav-link :href="route('admin.majors.index')" :active="request()->routeIs('admin.majors.*')">
             {{ __('Data Master') }}
         </x-nav-link>
+
+        <x-nav-link :href="route('admin.broadcast.index')" :active="request()->routeIs('admin.broadcast.*')">
+            {{ __('Broadcast WA') }}
+        </x-nav-link>
     @endif
 
     @if(Auth::user()->role === 'alumni')
