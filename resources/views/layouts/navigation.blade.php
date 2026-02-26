@@ -46,6 +46,13 @@
             {{ __('Biodata Saya') }}
         </x-nav-link>
         
+        <x-nav-link :href="route('alumni.news.index')" :active="request()->routeIs('alumni.news.*')">
+            {{ __('Berita & Karir') }}
+        </x-nav-link>
+
+        <x-nav-link :href="route('alumni.directory')" :active="request()->routeIs('alumni.directory')">
+            {{ __('Direktori Alumni') }}
+        </x-nav-link>
         @endif
 
 </div>

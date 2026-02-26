@@ -18,12 +18,34 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-slate-900">
                     
-                    <form action="{{ route('alumni.biodata.update') }}" method="POST">
+                    <form action="{{ route('alumni.biodata.update') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PATCH')
 
                         <h3 class="text-lg font-bold text-slate-700 mb-4 border-b pb-2">Data Akademik</h3>
                         
+                        <div class="mb-6 flex flex-col sm:flex-row items-center gap-4 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                            <div class="w-24 h-24 rounded-full overflow-hidden bg-slate-200 border-4 border-white shadow-sm flex-shrink-0">
+                                @if($alumni->photo)
+                                    <img src="{{ asset('storage/' . $alumni->photo) }}" class="w-full h-full object-cover" alt="Foto Profil">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center text-slate-400 font-bold text-2xl">
+                                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="flex-1">
+                                <x-input-label for="photo" :value="__('Upload Foto Profil Baru (Opsional)')" />
+                                <input type="file" id="photo" name="photo" class="block w-full text-sm text-slate-500 mt-1
+                                    file:mr-4 file:py-2 file:px-4
+                                    file:rounded-full file:border-0
+                                    file:text-sm file:font-semibold
+                                    file:bg-blue-50 file:text-blue-700
+                                    hover:file:bg-blue-100" />
+                                <p class="text-xs text-slate-500 mt-1">Format: JPG, PNG. Maksimal ukuran 2MB.</p>
+                                <x-input-error :messages="$errors->get('photo')" class="mt-2" />
+                            </div>
+                        </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div>
                                 <x-input-label for="nim" :value="__('NIM')" />

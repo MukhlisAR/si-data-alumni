@@ -65,6 +65,9 @@ Route::middleware(['auth', 'role:alumni'])->prefix('alumni')->name('alumni.')->g
     // Baca Berita
     Route::get('/berita', [AlumniController::class, 'newsIndex'])->name('news.index');
     Route::get('/berita/{slug}', [AlumniController::class, 'newsShow'])->name('news.show');
+
+    //direktori
+    Route::get('/direktori', [AlumniController::class, 'directory'])->name('directory');
 });
 
 
