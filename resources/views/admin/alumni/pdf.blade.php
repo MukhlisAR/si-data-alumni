@@ -6,7 +6,7 @@
         /* Reset dasar agar kertas bersih */
         body {
             font-family: sans-serif;
-            font-size: 12px;
+            font-size: 11px; /* Dikecilkan sedikit agar muat foto */
             color: #333;
         }
 
@@ -27,21 +27,20 @@
             font-size: 12px;
         }
 
-        /* Tabel Data Utama - Kunci Kerapian */
+        /* Tabel Data Utama */
         table {
             width: 100%;
-            border-collapse: collapse; /* Menyatukan garis border */
+            border-collapse: collapse; 
             margin-bottom: 20px;
         }
 
         th, td {
             border: 1px solid #999;
-            padding: 8px 10px;
-            vertical-align: top; /* Agar teks selalu mulai dari atas */
+            padding: 6px 8px;
+            vertical-align: top;
             text-align: left;
         }
 
-        /* Warna Header Tabel */
         th {
             background-color: #eee;
             font-weight: bold;
@@ -49,12 +48,10 @@
             font-size: 10px;
         }
 
-        /* Zebra Striping (Warna selang-seling baris) */
         tr:nth-child(even) {
             background-color: #f9f9f9;
         }
 
-        /* Mencegah baris terpotong saat ganti halaman */
         tr {
             page-break-inside: avoid;
         }
@@ -66,21 +63,12 @@
             margin-top: 20px;
             color: #777;
         }
-        
-        /* Badge Status */
-        .badge {
-            display: inline-block;
-            padding: 2px 5px;
-            font-size: 9px;
-            background-color: #ddd;
-            border-radius: 3px;
-        }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>Laporan Data Alumni</h1>
+        <h1>Buku Kenangan & Data Alumni</h1>
         <p>
             {{ $year ? 'Angkatan / Tahun Lulus: ' . $year : 'Seluruh Angkatan' }} <br>
             Dicetak Tanggal: {{ date('d F Y') }}
@@ -90,19 +78,31 @@
     <table>
         <thead>
             <tr>
-                <th style="width: 5%;">No</th>
+                <th style="width: 5%; text-align: center;">No</th>
+                <th style="width: 12%; text-align: center;">Foto</th>
                 <th style="width: 25%;">Nama & NIM</th>
-                <th style="width: 20%;">Jurusan & Angkatan</th>
-                <th style="width: 25%;">Pekerjaan</th>
-                <th style="width: 25%;">Kontak / Alamat</th>
+                <th style="width: 18%;">Jurusan & Angkatan</th>
+                <th style="width: 20%;">Pekerjaan</th>
+                <th style="width: 20%;">Kontak / Alamat</th>
             </tr>
         </thead>
         <tbody>
             @forelse($alumnis as $index => $data)
             <tr>
                 <td style="text-align: center;">{{ $index + 1 }}</td>
+                
+                <td style="text-align: center;">
+                    @if($data->photo)
+                        <img src="{{ public_path('storage/' . $data->photo) }}" style="width: 50px; height: 60px; object-fit: cover; border: 1px solid #ccc;">
+                    @else
+                        <div style="width: 50px; height: 60px; background-color: #e2e8f0; border: 1px solid #ccc; display: inline-block;">
+                            <span style="font-size: 9px; color: #94a3b8; display: block; margin-top: 25px;">No Photo</span>
+                        </div>
+                    @endif
+                </td>
+
                 <td>
-                    <strong style="font-size: 13px;">{{ $data->user->name }}</strong><br>
+                    <strong style="font-size: 12px;">{{ $data->user->name }}</strong><br>
                     <span style="color: #555;">NIM: {{ $data->nim }}</span>
                 </td>
                 <td>
@@ -112,9 +112,9 @@
                 <td>
                     @if($data->job_title)
                         <strong>{{ $data->job_title }}</strong><br>
-                        at {{ $data->company }}
+                        <span style="font-size: 10px;">at {{ $data->company }}</span>
                     @else
-                        <span style="color: #999;">- Belum diisi -</span>
+                        <span style="color: #999;">-</span>
                     @endif
                 </td>
                 <td>
@@ -124,7 +124,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="5" style="text-align: center; padding: 20px;">
+                <td colspan="6" style="text-align: center; padding: 20px;">
                     Tidak ada data alumni yang ditemukan.
                 </td>
             </tr>

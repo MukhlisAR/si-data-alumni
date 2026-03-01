@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB; 
 use App\Models\User;
 use App\Models\Alumni;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -10,13 +12,29 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class AdminController extends Controller
 {
     public function index()
-    {
-        // Statistik Sederhana untuk Dashboard
+    { // 1. Data Statistik Angka (Card)
         $totalAlumni = User::where('role', 'alumni')->count();
         $totalVerified = Alumni::where('status', 'verified')->count();
         $totalPending = Alumni::where('status', 'pending')->count();
 
-        return view('admin.dashboard', compact('totalAlumni', 'totalVerified', 'totalPending'));
+        // 2. Data Grafik 1: Status Alumni (Pie Chart)
+        // Hasil: ['verified' => 10, 'pending' => 5, 'rejected' => 2]
+        $statusData = Alumni::select('status', DB::raw('count(*) as total'))
+            ->groupBy('status')
+            ->pluck('total', 'status');
+
+        // 3. Data Grafik 2: Alumni per Tahun Lulus (Bar Chart)
+        // Hasil: ['2020' => 50, '2021' => 75, '2022' => 100]
+        $yearData = Alumni::select('graduation_year', DB::raw('count(*) as total'))
+             ->where('status', 'verified') // Hanya hitung yang verified
+             ->groupBy('graduation_year')
+             ->orderBy('graduation_year', 'asc')
+             ->pluck('total', 'graduation_year');
+
+        return view('admin.dashboard', compact(
+            'totalAlumni', 'totalVerified', 'totalPending', 
+            'statusData', 'yearData'
+        ));
     }
 
     public function alumniIndex()
