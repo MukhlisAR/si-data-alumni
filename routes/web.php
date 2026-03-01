@@ -31,6 +31,14 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // Dashboard Admin
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
     
+    // Fitur Cetak & Export (Pastikan di atas route {id})
+    Route::get('/alumni/cetak', [AdminController::class, 'cetakPdf'])->name('alumni.cetak');
+    Route::get('/alumni/export', [AdminController::class, 'exportExcel'])->name('alumni.export'); // <--- TAMBAHKAN INI
+    
+    Route::get('/alumni', [AdminController::class, 'alumniIndex'])->name('alumni.index');
+    Route::get('/alumni/create', [AdminController::class, 'create'])->name('alumni.create');
+    Route::post('/alumni', [AdminController::class, 'store'])->name('alumni.store');
+    
     // Kelola Alumni & Cetak (Cetak di atas agar tidak bentrok dengan {id})
     Route::get('/alumni/cetak', [AdminController::class, 'cetakPdf'])->name('alumni.cetak');
     Route::get('/alumni', [AdminController::class, 'alumniIndex'])->name('alumni.index');

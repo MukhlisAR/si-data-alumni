@@ -91,4 +91,67 @@ class AdminController extends Controller
         // Download file PDF
         return $pdf->stream('Buku-Wisuda-' . ($year ?? 'Semua') . '.pdf');
     }
+    // === TAMBAHKAN FUNGSI EXPORT EXCEL (CSV) INI ===
+    public function exportExcel(Request $request)
+    {
+        $year = $request->input('year');
+
+        // Query data alumni verified
+        $query = Alumni::with('user')->where('status', 'verified');
+        if ($year) {
+            $query->where('graduation_year', $year);
+        }
+        
+        // Ambil dan urutkan berdasarkan nama
+        $alumnis = $query->get()->sortBy(function($alumni) {
+            return $alumni->user->name;
+        });
+
+        // Nama file saat didownload
+        $fileName = 'Data_Alumni_' . ($year ?? 'Semua_Angkatan') . '_' . date('Y-m-d') . '.csv';
+
+        // Header HTTP agar browser mengenali ini sebagai file download Excel/CSV
+        $headers = [
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        ];
+
+        // Judul Kolom (Baris Pertama Excel)
+        $columns = ['No', 'Nama Lengkap', 'NIM', 'Jurusan', 'Tahun Lulus', 'Pekerjaan', 'Perusahaan', 'No Telp/WA', 'Alamat'];
+
+        // Proses tulis data ke file secara langsung (Streaming)
+        $callback = function() use($alumnis, $columns) {
+            // Buka akses output file
+            $file = fopen('php://output', 'w');
+            
+            // Tambahkan BOM (Byte Order Mark) agar Excel membaca karakter khusus dengan benar
+            fputs($file, "\xEF\xBB\xBF");
+            
+            // Tulis baris judul kolom
+            fputcsv($file, $columns);
+
+            $rowNo = 1;
+            // Looping data alumni dan tulis ke baris Excel
+            foreach ($alumnis as $alumni) {
+                fputcsv($file, [
+                    $rowNo++,
+                    $alumni->user->name,
+                    $alumni->nim,
+                    $alumni->major,
+                    $alumni->graduation_year,
+                    $alumni->job_title ?? '-',
+                    $alumni->company ?? '-',
+                    $alumni->phone ?? '-',
+                    $alumni->address ?? '-'
+                ]);
+            }
+            fclose($file);
+        };
+
+        // Kirim response download ke browser
+        return response()->stream($callback, 200, $headers);
+    }
 }
