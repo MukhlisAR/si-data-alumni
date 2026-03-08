@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB; 
+use Illuminate\Support\Facades\DB;
+use App\Models\Major;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Alumni;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -153,5 +155,50 @@ class AdminController extends Controller
 
         // Kirim response download ke browser
         return response()->stream($callback, 200, $headers);
+    }
+    // ==================================================
+    // FITUR TAMBAH ALUMNI MANUAL OLEH ADMIN
+    // ==================================================
+
+    // 1. Menampilkan Form Tambah Alumni
+    public function create()
+    {
+        // Ambil data jurusan dari database untuk dimasukkan ke opsi Dropdown
+        $majors = Major::orderBy('name', 'asc')->get(); 
+        
+        return view('admin.alumni.create', compact('majors'));
+    }
+
+    // 2. Memproses Penyimpanan Data Alumni Baru
+    public function store(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'nim' => 'required|string|max:20|unique:alumnis',
+            'graduation_year' => 'required|digits:4|integer',
+            'major' => 'required|string',
+        ]);
+
+        // A. Buat Akun User-nya dulu (Password default kita atur: 'password')
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make('password'), 
+            'role' => 'alumni',
+        ]);
+
+        // B. Buat Data Biodata Alumninya (Otomatis status Verified)
+        Alumni::create([
+            'user_id' => $user->id,
+            'nim' => $request->nim,
+            'graduation_year' => $request->graduation_year,
+            'major' => $request->major,
+            'status' => 'verified', // Karena ditambahkan admin, langsung sah!
+        ]);
+
+        return redirect()->route('admin.alumni.index')
+            ->with('success', 'Data alumni berhasil ditambahkan! Akun bisa login dengan email tersebut dan password default: password');
     }
 }

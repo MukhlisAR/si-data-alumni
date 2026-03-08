@@ -63,4 +63,47 @@ class AdminNewsController extends Controller
 
         return redirect()->route('admin.news.index')->with('success', 'Berita berhasil dihapus.');
     }
+    // 1. Menampilkan Form Edit Berita
+    public function edit($id)
+    {
+        // Cari berita berdasarkan ID
+        $news = \App\Models\News::findOrFail($id);
+        
+        // Tampilkan halaman edit dan kirim data berita tersebut
+        return view('admin.news.edit', compact('news'));
+    }
+
+    // 2. Memproses Perubahan Data Berita
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Maks 2MB
+        ]);
+
+        $news = \App\Models\News::findOrFail($id);
+
+        $data = [
+            'title' => $request->title,
+            'content' => $request->content,
+            // Opsional: Perbarui slug jika judul berubah
+            'slug' => \Illuminate\Support\Str::slug($request->title) . '-' . time(),
+        ];
+
+        // Cek apakah admin mengupload gambar baru
+        if ($request->hasFile('image')) {
+            // Hapus gambar lama jika ada
+            if ($news->image && \Illuminate\Support\Facades\Storage::disk('public')->exists($news->image)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($news->image);
+            }
+            // Simpan gambar baru
+            $data['image'] = $request->file('image')->store('news-images', 'public');
+        }
+
+        // Simpan pembaruan ke database
+        $news->update($data);
+
+        return redirect()->route('admin.news.index')->with('success', 'Berita berhasil diperbarui!');
+    }
 }
