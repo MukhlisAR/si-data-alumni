@@ -93,26 +93,71 @@ class AdminController extends Controller
         // Download file PDF
         return $pdf->stream('Buku-Wisuda-' . ($year ?? 'Semua') . '.pdf');
     }
-    // === TAMBAHKAN FUNGSI EXPORT EXCEL (CSV) INI ===
-    public function exportExcel(Request $request)
+   
+    // ==================================================
+    // FITUR TAMBAH ALUMNI MANUAL OLEH ADMIN
+    // ==================================================
+
+    // 1. Menampilkan Form Tambah Alumni
+   
+    public function create()
     {
-        $year = $request->input('year');
+        $majors = \App\Models\Major::orderBy('name', 'asc')->get(); 
+        return view('admin.alumni.create', compact('majors'));
+    }
 
-        // Query data alumni verified
-        $query = Alumni::with('user')->where('status', 'verified');
-        if ($year) {
-            $query->where('graduation_year', $year);
-        }
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'nisn' => 'required|string|max:20|unique:alumnis', // <-- NISN
+            'graduation_year' => 'required|digits:4|integer',
+            'major' => 'required|string',
+        ]);
+
+        $user = \App\Models\User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => \Illuminate\Support\Facades\Hash::make('password'), 
+            'role' => 'alumni',
+        ]);
+
+        \App\Models\Alumni::create([
+            'user_id' => $user->id,
+            'nisn' => $request->nisn, // <-- NISN
+            'graduation_year' => $request->graduation_year,
+            'major' => $request->major,
+            'status' => 'verified',
+        ]);
+
+        return redirect()->route('admin.alumni.index')
+            ->with('success', 'Data alumni berhasil ditambahkan! Password default: password');
+    }
+    // ==================================================
+    // FITUR CETAK PDF BUKU KENANGAN ALUMNI
+    // ==================================================
+    public function pdf()
+    {
+        // Ambil data alumni yang sudah diverifikasi (verified)
+        $alumnis = \App\Models\Alumni::with('user')->where('status', 'verified')->get();
+
+        // Load tampilan dari file resources/views/admin/alumni/pdf.blade.php
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.alumni.pdf', compact('alumnis'));
+
+        // Tampilkan hasilnya langsung di browser
+        return $pdf->stream('buku-kenangan-alumni.pdf');
+    
         
-        // Ambil dan urutkan berdasarkan nama
-        $alumnis = $query->get()->sortBy(function($alumni) {
-            return $alumni->user->name;
-        });
+        }
+   // ==================================================
+    // FITUR EXPORT EXCEL (CSV)
+    // ==================================================
+    public function exportExcel()
+    {
+        $fileName = 'Data_Alumni_' . date('Y-m-d_H-i-s') . '.csv';
+        $alumnis = \App\Models\Alumni::with('user')->get();
 
-        // Nama file saat didownload
-        $fileName = 'Data_Alumni_' . ($year ?? 'Semua_Angkatan') . '_' . date('Y-m-d') . '.csv';
-
-        // Header HTTP agar browser mengenali ini sebagai file download Excel/CSV
         $headers = [
             "Content-type"        => "text/csv",
             "Content-Disposition" => "attachment; filename=$fileName",
@@ -121,84 +166,34 @@ class AdminController extends Controller
             "Expires"             => "0"
         ];
 
-        // Judul Kolom (Baris Pertama Excel)
-        $columns = ['No', 'Nama Lengkap', 'NIM', 'Jurusan', 'Tahun Lulus', 'Pekerjaan', 'Perusahaan', 'No Telp/WA', 'Alamat'];
+        $columns = ['No', 'Nama Lengkap', 'NISN', 'Tempat Lahir', 'Tanggal Lahir', 'Jenis Kelamin', 'Tahun Lulus', 'Jurusan', 'Status', 'Pekerjaan', 'Instansi', 'No. HP', 'Alamat'];
 
-        // Proses tulis data ke file secara langsung (Streaming)
         $callback = function() use($alumnis, $columns) {
-            // Buka akses output file
             $file = fopen('php://output', 'w');
-            
-            // Tambahkan BOM (Byte Order Mark) agar Excel membaca karakter khusus dengan benar
-            fputs($file, "\xEF\xBB\xBF");
-            
-            // Tulis baris judul kolom
             fputcsv($file, $columns);
 
-            $rowNo = 1;
-            // Looping data alumni dan tulis ke baris Excel
+            $rowCounter = 1;
             foreach ($alumnis as $alumni) {
                 fputcsv($file, [
-                    $rowNo++,
-                    $alumni->user->name,
-                    $alumni->nim,
-                    $alumni->major,
-                    $alumni->graduation_year,
-                    $alumni->job_title ?? '-',
-                    $alumni->company ?? '-',
-                    $alumni->phone ?? '-',
+                    $rowCounter++, 
+                    $alumni->user->name ?? '-', 
+                    $alumni->nisn ?? '-', 
+                    $alumni->tempat_lahir ?? '-', 
+                    $alumni->tanggal_lahir ?? '-', 
+                    $alumni->jenis_kelamin ?? '-', 
+                    $alumni->graduation_year ?? '-', 
+                    $alumni->major ?? '-', 
+                    $alumni->status ?? '-', 
+                    $alumni->job_title ?? '-', 
+                    $alumni->company ?? '-', 
+                    $alumni->phone ?? '-', 
                     $alumni->address ?? '-'
                 ]);
             }
             fclose($file);
         };
 
-        // Kirim response download ke browser
         return response()->stream($callback, 200, $headers);
     }
-    // ==================================================
-    // FITUR TAMBAH ALUMNI MANUAL OLEH ADMIN
-    // ==================================================
-
-    // 1. Menampilkan Form Tambah Alumni
-    public function create()
-    {
-        // Ambil data jurusan dari database untuk dimasukkan ke opsi Dropdown
-        $majors = Major::orderBy('name', 'asc')->get(); 
-        
-        return view('admin.alumni.create', compact('majors'));
-    }
-
-    // 2. Memproses Penyimpanan Data Alumni Baru
-    public function store(Request $request)
-    {
-        // Validasi input
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'nim' => 'required|string|max:20|unique:alumnis',
-            'graduation_year' => 'required|digits:4|integer',
-            'major' => 'required|string',
-        ]);
-
-        // A. Buat Akun User-nya dulu (Password default kita atur: 'password')
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make('password'), 
-            'role' => 'alumni',
-        ]);
-
-        // B. Buat Data Biodata Alumninya (Otomatis status Verified)
-        Alumni::create([
-            'user_id' => $user->id,
-            'nim' => $request->nim,
-            'graduation_year' => $request->graduation_year,
-            'major' => $request->major,
-            'status' => 'verified', // Karena ditambahkan admin, langsung sah!
-        ]);
-
-        return redirect()->route('admin.alumni.index')
-            ->with('success', 'Data alumni berhasil ditambahkan! Akun bisa login dengan email tersebut dan password default: password');
-    }
+    
 }

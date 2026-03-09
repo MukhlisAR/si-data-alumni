@@ -31,20 +31,29 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // Dashboard Admin
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
     
-    // Fitur Cetak & Export (Pastikan di atas route {id})
+    // Fitur Cetak & Export (Harus di atas route {id} agar tidak dianggap sebagai ID)
+    Route::get('/alumni/pdf', [AdminController::class, 'pdf'])->name('alumni.pdf'); // <--- INI RUTE PDF YANG BENAR
     Route::get('/alumni/cetak', [AdminController::class, 'cetakPdf'])->name('alumni.cetak');
-    Route::get('/alumni/export', [AdminController::class, 'exportExcel'])->name('alumni.export'); // <--- TAMBAHKAN INI
+    Route::get('/alumni/export', [AdminController::class, 'exportExcel'])->name('alumni.export');
     
+    // Kelola Alumni (Tambah, Index, Tampil, Verifikasi)
     Route::get('/alumni', [AdminController::class, 'alumniIndex'])->name('alumni.index');
     Route::get('/alumni/create', [AdminController::class, 'create'])->name('alumni.create');
     Route::post('/alumni', [AdminController::class, 'store'])->name('alumni.store');
-    
-    // Kelola Alumni & Cetak (Cetak di atas agar tidak bentrok dengan {id})
-    Route::get('/alumni/cetak', [AdminController::class, 'cetakPdf'])->name('alumni.cetak');
-    Route::get('/alumni', [AdminController::class, 'alumniIndex'])->name('alumni.index');
     Route::get('/alumni/{id}', [AdminController::class, 'alumniShow'])->name('alumni.show');
     Route::patch('/alumni/{id}/verify', [AdminController::class, 'verify'])->name('alumni.verify');
     
+    // Kelola Berita
+    Route::resource('news', AdminNewsController::class);
+    
+    // Data Master (Jurusan)
+    Route::get('/majors', [AdminMajorController::class, 'index'])->name('majors.index');
+    Route::post('/majors', [AdminMajorController::class, 'store'])->name('majors.store');
+    Route::delete('/majors/{id}', [AdminMajorController::class, 'destroy'])->name('majors.destroy');
+    
+    // Broadcast WA
+    Route::get('/broadcast', [AdminBroadcastController::class, 'index'])->name('broadcast.index');
+
     // Kelola Berita
     Route::resource('news', AdminNewsController::class);
     
