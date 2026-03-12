@@ -16,7 +16,6 @@ class AlumniController extends Controller
     {
         $alumni = Auth::user()->alumni;
         
-        // Aturan Baru: Semua kolom penting HARUS terisi agar statusnya "Lengkap"
         $isComplete = $alumni && 
                       $alumni->nisn && 
                       $alumni->tempat_lahir && 
@@ -25,7 +24,10 @@ class AlumniController extends Controller
                       $alumni->graduation_year && 
                       $alumni->major;
 
-        return view('alumni.dashboard', compact('alumni', 'isComplete'));
+        // AMBIL 3 BERITA/LOWONGAN TERBARU
+        $latestNews = \App\Models\News::latest()->take(3)->get();
+
+        return view('alumni.dashboard', compact('alumni', 'isComplete', 'latestNews'));
     }
 
    // 2. Menampilkan Form Edit Biodata
@@ -132,5 +134,14 @@ class AlumniController extends Controller
                        ->pluck('graduation_year');
 
         return view('alumni.directory', compact('alumnis', 'years'));
+    }
+
+    // 7. Menampilkan Detail Profil Alumni Lain
+    public function showAlumni($id)
+    {
+        // Cari data alumni yang diverifikasi berdasarkan ID
+        $alumniDetail = Alumni::with('user')->where('id', $id)->where('status', 'verified')->firstOrFail();
+        
+        return view('alumni.directory_show', compact('alumniDetail'));
     }
 }
