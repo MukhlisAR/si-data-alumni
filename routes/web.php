@@ -43,14 +43,19 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/alumni/{id}', [AdminController::class, 'alumniShow'])->name('alumni.show');
     Route::patch('/alumni/{id}/verify', [AdminController::class, 'verify'])->name('alumni.verify');
     
+     // Master Data: Tahun Angkatan
+    Route::get('/academic-years', [App\Http\Controllers\AdminController::class, 'academicYears'])->name('academic_years.index');
+    Route::post('/academic-years', [App\Http\Controllers\AdminController::class, 'storeAcademicYear'])->name('academic_years.store');
+    Route::delete('/academic-years/{id}', [App\Http\Controllers\AdminController::class, 'destroyAcademicYear'])->name('academic_years.destroy');
+    
     // Kelola Berita
     Route::resource('news', AdminNewsController::class);
     
     // Data Master (Jurusan)
-    Route::get('/majors', [AdminMajorController::class, 'index'])->name('majors.index');
-    Route::post('/majors', [AdminMajorController::class, 'store'])->name('majors.store');
-    Route::delete('/majors/{id}', [AdminMajorController::class, 'destroy'])->name('majors.destroy');
-    
+    // Route::get('/majors', [AdminMajorController::class, 'index'])->name('majors.index');
+    // Route::post('/majors', [AdminMajorController::class, 'store'])->name('majors.store');
+    // Route::delete('/majors/{id}', [AdminMajorController::class, 'destroy'])->name('majors.destroy');
+   
     // Broadcast WA
     Route::get('/broadcast', [AdminBroadcastController::class, 'index'])->name('broadcast.index');
 

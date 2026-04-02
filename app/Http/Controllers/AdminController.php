@@ -196,4 +196,27 @@ class AdminController extends Controller
         return response()->stream($callback, 200, $headers);
     }
     
+
+    // Tampilan Master Data Angkatan
+    public function academicYears()
+    {
+        $years = \App\Models\AcademicYear::orderBy('year_name', 'desc')->get();
+        return view('admin.academic_years.index', compact('years'));
+    }
+
+    // Simpan Angkatan Baru
+    public function storeAcademicYear(Request $request)
+    {
+        $request->validate(['year_name' => 'required|string|unique:academic_years,year_name']);
+        \App\Models\AcademicYear::create(['year_name' => $request->year_name]);
+        return back()->with('success', 'Tahun Angkatan berhasil ditambahkan!');
+    }
+
+    // Hapus Angkatan
+    public function destroyAcademicYear($id)
+    {
+        \App\Models\AcademicYear::findOrFail($id)->delete();
+        return back()->with('success', 'Tahun Angkatan berhasil dihapus!');
+    }
+    
 }

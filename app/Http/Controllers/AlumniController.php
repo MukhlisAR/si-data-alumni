@@ -6,12 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Alumni;
-use App\Models\Major;
+use App\Models\AcademicYear; // Menggantikan Major
 use App\Models\News;
 
 class AlumniController extends Controller
 {
-   // 1. Menampilkan Dashboard Alumni
+    // 1. Menampilkan Dashboard Alumni
     public function index()
     {
         $alumni = Auth::user()->alumni;
@@ -30,33 +30,30 @@ class AlumniController extends Controller
         return view('alumni.dashboard', compact('alumni', 'isComplete', 'latestNews'));
     }
 
-   // 2. Menampilkan Form Edit Biodata
+    // 2. Menampilkan Form Edit Biodata
     public function editBiodata()
     {
         $user = Auth::user();
         
-        // Samakan persis dengan logika pemanggilan di Dashboard
         $alumni = $user->alumni ?? new \App\Models\Alumni();
         
-        // Ambil data jurusan dari Data Master
-        $majors = \App\Models\Major::orderBy('name', 'asc')->get();
+        // Ambil data Tahun Angkatan dari Data Master
+        $academicYears = \App\Models\AcademicYear::orderBy('year_name', 'desc')->get();
 
-        return view('alumni.biodata', compact('user', 'alumni', 'majors'));
+        return view('alumni.biodata', compact('user', 'alumni', 'academicYears'));
     }
 
- // 3. Menyimpan atau Memperbarui Biodata
+    // 3. Menyimpan atau Memperbarui Biodata
     public function updateBiodata(Request $request)
     {
-       
-
         // 1. Validasi Input (Pastikan kolom baru wajib diisi)
         $request->validate([
             'nisn' => 'required|string|max:20',
             'tempat_lahir' => 'required|string|max:100',
             'tanggal_lahir' => 'required|date',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
-            'graduation_year' => 'required|digits:4|integer|min:2000|max:'.(date('Y')+1),
-            'major' => 'required|string|max:100',
+            'graduation_year' => 'required|string|max:50', // Diubah agar bisa menerima string seperti "2023/2024"
+            'major' => 'required|string|max:100', // Major kembali jadi input text biasa
             'phone' => 'nullable|string|max:15',
             'address' => 'nullable|string|max:500',
             'job_title' => 'nullable|string|max:100',
@@ -95,6 +92,7 @@ class AlumniController extends Controller
 
         return redirect()->route('alumni.biodata')->with('success', 'Biodata berhasil diperbarui!');
     }
+
     // 4. Menampilkan Daftar Berita untuk Alumni
     public function newsIndex()
     {
@@ -121,12 +119,14 @@ class AlumniController extends Controller
             });
         }
 
+        // Filter berdasarkan Angkatan
         if ($request->filled('year')) {
             $query->where('graduation_year', $request->year);
         }
 
         $alumnis = $query->paginate(12);
         
+        // Mengambil daftar tahun angkatan unik yang sudah ada di database alumni
         $years = Alumni::where('status', 'verified')
                        ->select('graduation_year')
                        ->distinct()
@@ -139,7 +139,6 @@ class AlumniController extends Controller
     // 7. Menampilkan Detail Profil Alumni Lain
     public function showAlumni($id)
     {
-        // Cari data alumni yang diverifikasi berdasarkan ID
         $alumniDetail = Alumni::with('user')->where('id', $id)->where('status', 'verified')->firstOrFail();
         
         return view('alumni.directory_show', compact('alumniDetail'));

@@ -94,21 +94,21 @@
                             </div>
 
                             <div>
-                                <label for="graduation_year" class="block text-sm font-bold text-slate-700 mb-2">Tahun Lulus</label>
-                                <input id="graduation_year" type="number" name="graduation_year" value="{{ old('graduation_year', $alumni->graduation_year ?? '') }}" required placeholder="Contoh: 2023" class="block w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 bg-slate-50 focus:bg-white transition-colors" />
+                                <label for="graduation_year" class="block text-sm font-bold text-slate-700 mb-2">Tahun Lulus / Angkatan</label>
+                                <select id="graduation_year" name="graduation_year" required class="block w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 bg-slate-50 focus:bg-white transition-colors cursor-pointer">
+                                    <option value="" disabled {{ old('graduation_year', $alumni->graduation_year ?? '') ? '' : 'selected' }}>-- Pilih Tahun Lulus / Angkatan --</option>
+                                    @foreach($academicYears as $year)
+                                        <option value="{{ $year->year_name }}" {{ old('graduation_year', $alumni->graduation_year ?? '') == $year->year_name ? 'selected' : '' }}>
+                                            {{ $year->year_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                                 <x-input-error :messages="$errors->get('graduation_year')" class="mt-2" />
                             </div>
 
                             <div class="md:col-span-2">
                                 <label for="major" class="block text-sm font-bold text-slate-700 mb-2">Jurusan</label>
-                                <select id="major" name="major" required class="block w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 bg-slate-50 focus:bg-white transition-colors cursor-pointer">
-                                    <option value="" disabled {{ old('major', $alumni->major ?? '') ? '' : 'selected' }}>-- Pilih Jurusan --</option>
-                                    @foreach($majors as $jurusan)
-                                        <option value="{{ $jurusan->name }}" {{ old('major', $alumni->major ?? '') == $jurusan->name ? 'selected' : '' }}>
-                                            {{ $jurusan->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <input id="major" type="text" name="major" value="{{ old('major', $alumni->major ?? '') }}" required placeholder="Contoh: Teknik Komputer dan Jaringan" class="block w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 bg-slate-50 focus:bg-white transition-colors" />
                                 <x-input-error :messages="$errors->get('major')" class="mt-2" />
                             </div>
                         </div>

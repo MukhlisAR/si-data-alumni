@@ -24,7 +24,7 @@
 
                     <div class="md:w-64">
                         <label for="year" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Filter Angkatan</label>
-                        <select name="year" id="year" class="block w-full py-3 px-4 border border-slate-300 rounded-xl leading-5 bg-slate-50 focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors cursor-pointer">
+                        <select name="year" id="year" onchange="this.form.submit()" class="block w-full py-3 px-4 border border-slate-300 rounded-xl leading-5 bg-slate-50 focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors cursor-pointer">
                             <option value="">-- Semua Angkatan --</option>
                             @foreach($years as $y)
                                 <option value="{{ $y }}" {{ request('year') == $y ? 'selected' : '' }}>Lulusan Tahun {{ $y }}</option>
