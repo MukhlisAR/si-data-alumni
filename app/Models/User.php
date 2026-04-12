@@ -19,7 +19,7 @@ class User extends Authenticatable
      */
   protected $fillable = [
     'name',
-    'email',
+    'nisn',
     'password',
     'role', // Tambahkan ini agar bisa diisi saat register/seeding
 ];

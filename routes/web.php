@@ -31,34 +31,29 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // Dashboard Admin
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
     
-    // Fitur Cetak & Export (Harus di atas route {id} agar tidak dianggap sebagai ID)
-    Route::get('/alumni/pdf', [AdminController::class, 'pdf'])->name('alumni.pdf'); // <--- INI RUTE PDF YANG BENAR
+    // Fitur Cetak & Export
+    Route::get('/alumni/pdf', [AdminController::class, 'pdf'])->name('alumni.pdf');
     Route::get('/alumni/cetak', [AdminController::class, 'cetakPdf'])->name('alumni.cetak');
     Route::get('/alumni/export', [AdminController::class, 'exportExcel'])->name('alumni.export');
     
-    // Kelola Alumni (Tambah, Index, Tampil, Verifikasi)
+    // Kelola Alumni
     Route::get('/alumni', [AdminController::class, 'alumniIndex'])->name('alumni.index');
     Route::get('/alumni/create', [AdminController::class, 'create'])->name('alumni.create');
     Route::post('/alumni', [AdminController::class, 'store'])->name('alumni.store');
     Route::get('/alumni/{id}', [AdminController::class, 'alumniShow'])->name('alumni.show');
     Route::patch('/alumni/{id}/verify', [AdminController::class, 'verify'])->name('alumni.verify');
     
-     // Master Data: Tahun Angkatan
-    Route::get('/academic-years', [App\Http\Controllers\AdminController::class, 'academicYears'])->name('academic_years.index');
-    Route::post('/academic-years', [App\Http\Controllers\AdminController::class, 'storeAcademicYear'])->name('academic_years.store');
-    Route::delete('/academic-years/{id}', [App\Http\Controllers\AdminController::class, 'destroyAcademicYear'])->name('academic_years.destroy');
+    // Master Data: Tahun Angkatan
+    Route::get('/academic-years', [AdminController::class, 'academicYears'])->name('academic_years.index');
+    Route::post('/academic-years', [AdminController::class, 'storeAcademicYear'])->name('academic_years.store');
+    Route::delete('/academic-years/{id}', [AdminController::class, 'destroyAcademicYear'])->name('academic_years.destroy');
     
-    // Kelola Berita
-    Route::resource('news', AdminNewsController::class);
+    // Kelola NISN Valid (Whitelist & Import)
+    Route::get('/valid-nisns', [AdminController::class, 'validNisnsIndex'])->name('valid_nisns.index');
+    Route::post('/valid-nisns', [AdminController::class, 'storeValidNisn'])->name('valid_nisns.store');
+    Route::delete('/valid-nisns/{id}', [AdminController::class, 'destroyValidNisn'])->name('valid_nisns.destroy');
+    Route::post('/valid-nisn/import', [AdminController::class, 'importNisn'])->name('valid_nisn.import');
     
-    // Data Master (Jurusan)
-    // Route::get('/majors', [AdminMajorController::class, 'index'])->name('majors.index');
-    // Route::post('/majors', [AdminMajorController::class, 'store'])->name('majors.store');
-    // Route::delete('/majors/{id}', [AdminMajorController::class, 'destroy'])->name('majors.destroy');
-   
-    // Broadcast WA
-    Route::get('/broadcast', [AdminBroadcastController::class, 'index'])->name('broadcast.index');
-
     // Kelola Berita
     Route::resource('news', AdminNewsController::class);
     
@@ -77,7 +72,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 // ==========================================
 Route::middleware(['auth', 'role:alumni'])->prefix('alumni')->name('alumni.')->group(function () {
     
-    // Dashboard Alumni (INI YANG SEBELUMNYA HILANG/ERROR)
+    // Dashboard Alumni
     Route::get('/dashboard', [AlumniController::class, 'index'])->name('dashboard');
     
     // Kelola Biodata
@@ -88,11 +83,9 @@ Route::middleware(['auth', 'role:alumni'])->prefix('alumni')->name('alumni.')->g
     Route::get('/berita', [AlumniController::class, 'newsIndex'])->name('news.index');
     Route::get('/berita/{slug}', [AlumniController::class, 'newsShow'])->name('news.show');
 
-   
-
     // Direktori
     Route::get('/direktori', [AlumniController::class, 'directory'])->name('directory');
-    Route::get('/direktori/{id}', [AlumniController::class, 'showAlumni'])->name('directory.show'); // <--- TAMBAHKAN INI
+    Route::get('/direktori/{id}', [AlumniController::class, 'showAlumni'])->name('directory.show');
 });
 
 

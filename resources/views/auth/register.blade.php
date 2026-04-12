@@ -14,10 +14,10 @@
         </div>
 
         <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" class="text-slate-700 font-medium" />
-            <x-text-input id="email" class="block mt-1 w-full border-slate-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg shadow-sm" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+    <x-input-label for="nisn" :value="__('NISN')" />
+    <x-text-input id="nisn" class="block mt-1 w-full" type="text" name="nisn" :value="old('nisn')" required autocomplete="username" placeholder="Masukkan NISN Anda" />
+    <x-input-error :messages="$errors->get('nisn')" class="mt-2" />
+</div>
 
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" class="text-slate-700 font-medium" />

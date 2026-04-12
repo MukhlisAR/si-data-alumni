@@ -50,7 +50,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
             
             <span class="inline-block py-1 px-3 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-sm font-semibold mb-6 shadow-sm">
-                🎉 Selamat Datang di Jaringan Alumni Resmi
+                 Selamat Datang di Jaringan Alumni Resmi
             </span>
             
             <h1 class="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight mb-8 leading-tight">

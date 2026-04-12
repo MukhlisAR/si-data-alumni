@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Major;
@@ -10,6 +9,9 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Alumni;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ValidNisnImport;
+use App\Models\ValidNisn; // <-- TAMBAHAN: Memanggil model ValidNisn
 
 class AdminController extends Controller
 {
@@ -92,6 +94,23 @@ class AdminController extends Controller
 
         // Download file PDF
         return $pdf->stream('Buku-Wisuda-' . ($year ?? 'Semua') . '.pdf');
+    }
+    // Fungsi Import Excel NISN
+    public function importNisn(Request $request)
+    {
+        // Validasi file yang diupload wajib format excel/csv
+        $request->validate([
+            'file_excel' => 'required|mimes:xlsx,xls,csv|max:2048'
+        ]);
+
+        try {
+            // Proses import
+            Excel::import(new ValidNisnImport, $request->file('file_excel'));
+            
+            return back()->with('success', 'Ratusan Data NISN berhasil di-import dari Excel!');
+        } catch (\Exception $e) {
+            return back()->withErrors(['Terjadi kesalahan: Pastikan format Excel Anda sudah benar.']);
+        }
     }
    
     // ==================================================
@@ -219,4 +238,38 @@ class AdminController extends Controller
         return back()->with('success', 'Tahun Angkatan berhasil dihapus!');
     }
     
+    // ==================================================
+    // FITUR KELOLA DATA NISN VALID (WHITELIST)
+    // ==================================================
+
+    // 1. Tampilkan Halaman Daftar NISN
+    public function validNisnsIndex()
+    {
+        $validNisns = \App\Models\ValidNisn::latest()->get();
+        return view('admin.valid_nisns.index', compact('validNisns'));
+    }
+
+    // 2. Simpan NISN Baru (Input Manual 1 per 1)
+    public function storeValidNisn(Request $request)
+    {
+        $request->validate([
+            'nisn' => 'required|string|max:50|unique:valid_nisns,nisn',
+            'name' => 'nullable|string|max:255',
+        ]);
+
+        \App\Models\ValidNisn::create([
+            'nisn' => $request->nisn,
+            'name' => $request->name,
+        ]);
+
+        return back()->with('success', 'Data NISN berhasil ditambahkan secara manual!');
+    }
+
+    // 3. Hapus Data NISN
+    public function destroyValidNisn($id)
+    {
+        \App\Models\ValidNisn::findOrFail($id)->delete();
+        return back()->with('success', 'Data NISN berhasil dihapus dari daftar!');
+    }
+
 }

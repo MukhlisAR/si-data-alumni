@@ -11,11 +11,10 @@
         @csrf
 
         <div>
-            <label for="email" class="block text-sm font-bold text-slate-700 mb-2">Alamat Email</label>
-            <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username" placeholder="nama@email.com"
-                class="block w-full px-4 py-3.5 rounded-xl border border-slate-300 text-slate-900 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors bg-slate-50 focus:bg-white placeholder-slate-400 font-medium" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2 text-red-500" />
-        </div>
+    <x-input-label for="nisn" :value="__('NISN / Username Admin')" />
+    <x-text-input id="nisn" class="block mt-1 w-full" type="text" name="nisn" :value="old('nisn')" required autofocus autocomplete="username" placeholder="Masukkan NISN / Username Anda" />
+    <x-input-error :messages="$errors->get('nisn')" class="mt-2" />
+</div>
 
         <div>
             <div class="flex justify-between items-center mb-2">

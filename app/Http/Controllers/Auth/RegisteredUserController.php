@@ -27,24 +27,36 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+  public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            // Validasi diubah: Wajib ada di tabel valid_nisns, dan belum dipakai di tabel users
+            'nisn' => ['required', 'string', 'max:20', 'exists:valid_nisns,nisn', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ], [
+            // Pesan error custom (Opsional tapi bagus)
+            'nisn.exists' => 'NISN ini tidak terdaftar di database sekolah. Silakan hubungi Admin.',
+            'nisn.unique' => 'Akun dengan NISN ini sudah pernah didaftarkan.',
         ]);
 
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email,
+            'nisn' => $request->nisn, // Menggunakan nisn
             'password' => Hash::make($request->password),
+            'role' => 'alumni', // Otomatis jadi alumni
+        ]);
+
+        // Opsional: Langsung buatkan kerangka data di tabel alumnis
+        \App\Models\Alumni::create([
+            'user_id' => $user->id,
+            'nisn' => $request->nisn,
+            'status' => 'pending' // atau verified
         ]);
 
         event(new Registered($user));
-
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('alumni.dashboard', absolute: false));
     }
 }
