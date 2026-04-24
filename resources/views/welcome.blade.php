@@ -18,14 +18,17 @@
                 
                 <div class="flex items-center gap-3">
                     <img src="{{ asset('assets/logo.png') }}" class="w-12 h-12 object-contain" alt="Logo MA Syekh Abdurrahman">
-                    
                     <span class="font-bold text-xl tracking-tight text-slate-800">Portal<span class="text-blue-600">Alumni</span></span>
                 </div>
 
-                <div class="hidden md:flex items-center space-x-4">
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="{{ route('public.news.index') }}" class="font-semibold text-slate-600 hover:text-blue-600 transition-colors">Portal Berita</a>
+
                     @if (Route::has('login'))
                         @auth
-                            <a href="{{ url('/dashboard') }}" class="font-semibold text-slate-600 hover:text-blue-600 transition-colors">Masuk ke Dashboard</a>
+                            <a href="{{ url('/dashboard') }}" class="font-bold text-white bg-blue-600 hover:bg-blue-700 px-6 py-2.5 rounded-full shadow-lg shadow-blue-600/30 transition-all hover:scale-105">
+                                Masuk ke Dashboard
+                            </a>
                         @else
                             <a href="{{ route('login') }}" class="font-semibold text-slate-600 hover:text-blue-600 px-4 py-2 transition-colors">Log in</a>
 
@@ -37,20 +40,19 @@
                         @endauth
                     @endif
                 </div>
-
             </div>
         </div>
     </nav>
 
-    <div class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+    <div class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden min-h-screen flex items-center justify-center">
         
         <div class="absolute top-0 right-0 -mr-20 -mt-20 w-[500px] h-[500px] bg-blue-400/10 rounded-full blur-3xl z-0"></div>
         <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-[400px] h-[400px] bg-indigo-400/10 rounded-full blur-3xl z-0"></div>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center mt-[-10vh]">
             
             <span class="inline-block py-1 px-3 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-sm font-semibold mb-6 shadow-sm">
-                 Selamat Datang di Jaringan Alumni Resmi
+                Selamat Datang di Jaringan Alumni Resmi
             </span>
             
             <h1 class="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight mb-8 leading-tight">
@@ -62,4 +64,31 @@
                 Platform resmi untuk mempererat tali silaturahmi, berbagi informasi karir, dan memperluas jaringan profesional sesama lulusan almamater tercinta.
             </p>
             
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                
+                @if (Route::has('login'))
+                    @auth
+                        <a href="{{ url('/dashboard') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 text-base font-bold rounded-full text-white bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/30 transition-all hover:-translate-y-1">
+                            Buka Dashboard Anda
+                        </a>
+                    @else
+                        <a href="{{ route('register') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 text-base font-bold rounded-full text-white bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/30 transition-all hover:-translate-y-1">
+                            Gabung Jaringan Alumni
+                        </a>
+                    @endauth
+                @endif
+
+                <a href="{{ route('public.news.index') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 border-2 border-slate-200 text-base font-bold rounded-full text-slate-700 bg-white hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 transition-all hover:-translate-y-1">
+                    <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15M9 11l3 3m0 0l3-3m-3 3V8" />
+                    </svg>
+                    Baca Berita Terbaru
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

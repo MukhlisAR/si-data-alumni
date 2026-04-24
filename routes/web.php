@@ -8,11 +8,15 @@ use App\Http\Controllers\AdminMajorController;
 use App\Http\Controllers\AdminBroadcastController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\PublicController;
 
 // 1. Halaman Landing Page
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/berita', [PublicController::class, 'newsIndex'])->name('public.news.index');
+Route::get('/berita/{slug}', [PublicController::class, 'newsShow'])->name('public.news.show');
 
 // 2. Logika Redirect Saat Login (Admin vs Alumni)
 Route::get('/dashboard', function () {
@@ -64,6 +68,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     
     // Broadcast WA
     Route::get('/broadcast', [AdminBroadcastController::class, 'index'])->name('broadcast.index');
+    Route::post('/broadcast/send', [AdminBroadcastController::class, 'send'])->name('broadcast.send'); // 
 });
 
 
