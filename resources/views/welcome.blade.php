@@ -97,12 +97,12 @@
                 Selamat Datang di Jaringan Alumni Resmi
             </span>
             
-            <h1 class="text-5xl md:text-7xl font-extrabold text-slate-50 tracking-tight mb-8 leading-tight">
+            <h1 class="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-8 leading-tight">
                 Tetap Terhubung, <br>
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Tumbuh Bersama.</span>
             </h1>
             
-            <p class="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-slate-50 mb-10 leading-relaxed">
+            <p class="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-white mb-10 leading-relaxed">
                 Platform resmi untuk mempererat tali silaturahmi, berbagi informasi karir, dan memperluas jaringan profesional sesama lulusan almamater tercinta.
             </p>
             

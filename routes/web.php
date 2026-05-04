@@ -48,9 +48,14 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::patch('/alumni/{id}/verify', [AdminController::class, 'verify'])->name('alumni.verify');
     
     // Master Data: Tahun Angkatan
-    Route::get('/academic-years', [AdminController::class, 'academicYears'])->name('academic_years.index');
-    Route::post('/academic-years', [AdminController::class, 'storeAcademicYear'])->name('academic_years.store');
-    Route::delete('/academic-years/{id}', [AdminController::class, 'destroyAcademicYear'])->name('academic_years.destroy');
+Route::get('/academic-years', [AdminController::class, 'academicYears'])->name('academic_years.index');
+Route::post('/academic-years', [AdminController::class, 'storeAcademicYear'])->name('academic_years.store');
+
+// FITUR EDIT & UPDATE (Cukup tulis nama belakangnya saja, awalan admin otomatis ditambahkan Laravel)
+Route::get('/academic-years/{id}/edit', [AdminController::class, 'editAcademicYear'])->name('academic_years.edit');
+Route::put('/academic-years/{id}', [AdminController::class, 'updateAcademicYear'])->name('academic_years.update');
+
+Route::delete('/academic-years/{id}', [AdminController::class, 'destroyAcademicYear'])->name('academic_years.destroy');
     
     // Kelola NISN Valid (Whitelist & Import)
     Route::get('/valid-nisns', [AdminController::class, 'validNisnsIndex'])->name('valid_nisns.index');

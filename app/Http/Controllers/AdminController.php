@@ -231,6 +231,41 @@ class AdminController extends Controller
         return back()->with('success', 'Tahun Angkatan berhasil ditambahkan!');
     }
 
+    // --------------------------------------------------------
+    // FITUR EDIT & UPDATE (TAMBAHAN BARU)
+    // --------------------------------------------------------
+
+    // Menampilkan Form Edit Angkatan
+    public function editAcademicYear($id)
+    {
+        $year = \App\Models\AcademicYear::findOrFail($id);
+        
+        // Mengarahkan ke file view form edit (silakan buat filenya nanti)
+        return view('admin.academic_years.edit', compact('year'));
+    }
+
+    // Memproses Pembaruan Data Angkatan
+    public function updateAcademicYear(Request $request, $id)
+    {
+        $request->validate([
+            // Validasi: Wajib diisi dan harus unik, KECUALI untuk data yang sedang diedit ini
+            'year_name' => 'required|string|unique:academic_years,year_name,' . $id
+        ], [
+            'year_name.required' => 'Tahun angkatan wajib diisi.',
+            'year_name.unique' => 'Tahun angkatan ini sudah ada di sistem.'
+        ]);
+
+        $year = \App\Models\AcademicYear::findOrFail($id);
+        $year->update([
+            'year_name' => $request->year_name
+        ]);
+
+        // Arahkan kembali ke halaman index tabel (Ganti URL-nya jika berbeda di web.php Anda)
+        return redirect('/admin/academic-years')->with('success', 'Tahun Angkatan berhasil diperbarui!');
+    }
+
+    // --------------------------------------------------------
+    
     // Hapus Angkatan
     public function destroyAcademicYear($id)
     {

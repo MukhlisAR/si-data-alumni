@@ -53,11 +53,21 @@
                                             <td class="py-3 px-4 border-b text-sm">{{ $index + 1 }}</td>
                                             <td class="py-3 px-4 border-b text-sm font-medium">{{ $y->year_name }}</td>
                                             <td class="py-3 px-4 border-b text-center">
-                                                <form action="{{ route('admin.academic_years.destroy', $y->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus angkatan ini?')">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="text-red-500 hover:text-red-700 font-bold text-sm transition-colors">Hapus</button>
-                                                </form>
+                                                
+                                                <!-- Container flex agar tombol sejajar -->
+                                                <div class="flex items-center justify-center gap-3">
+                                                    
+                                                    <!-- TOMBOL EDIT (Tambahan Baru) -->
+                                                    <a href="{{ route('admin.academic_years.edit', $y->id) }}" class="text-yellow-600 hover:text-yellow-800 font-bold text-sm transition-colors">Edit</a>
+
+                                                    <!-- TOMBOL HAPUS (Kode Asli) -->
+                                                    <form action="{{ route('admin.academic_years.destroy', $y->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus angkatan ini?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="text-red-500 hover:text-red-700 font-bold text-sm transition-colors">Hapus</button>
+                                                    </form>
+                                                </div>
+
                                             </td>
                                         </tr>
                                         @empty
