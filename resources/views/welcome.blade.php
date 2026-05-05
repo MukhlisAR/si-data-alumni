@@ -85,7 +85,7 @@
         </div>
     </nav>
 
-    <div style="background-image: url('{{ asset('assets/bg.webp') }}');" class="bg-cover relative pt-32 overflow-hidden min-h-screen flex items-center justify-center">
+    <div style="background-image: url('{{ asset('assets/bg.webp') }}');" class="bg-cover bg-center bg-no-repeat relative pt-32 overflow-hidden min-h-screen flex items-center justify-center">
         
         <div class="absolute inset-0 bg-black/30"></div>
         <!-- <div class="absolute top-0 right-0 -mr-20 -mt-20 w-[500px] h-[500px] bg-blue-400/10 rounded-full blur-3xl z-0"></div>
