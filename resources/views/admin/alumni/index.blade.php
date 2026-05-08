@@ -14,9 +14,9 @@
             @endif
 
            <div class="mb-4 flex flex-col sm:flex-row justify-between gap-3">
-                <a href="{{ route('admin.alumni.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow text-center">
+                <!-- <a href="{{ route('admin.alumni.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow text-center">
                     + Tambah Alumni Manual
-                </a>
+                </a> -->
                 
                 <div class="flex gap-2">
                     <a href="{{ route('admin.alumni.export') }}" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow flex items-center gap-2">

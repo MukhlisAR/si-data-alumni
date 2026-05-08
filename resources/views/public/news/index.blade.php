@@ -12,25 +12,23 @@
 </head>
 <body class="antialiased bg-slate-50 text-slate-900 font-[figtree]">
 
-    <nav class="fixed w-full z-50 transition-all duration-300 bg-white/80 backdrop-blur-md border-b border-slate-200">
+    <nav x-data="{ mobileMenuOpen: false }" class="fixed w-full z-50 transition-all duration-300 bg-white/80 backdrop-blur-md border-b border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 
-                <a href="/" class="flex items-center gap-3 hover:opacity-80 transition">
+                <div class="flex items-center gap-3">
                     <img src="{{ asset('assets/logo.png') }}" class="w-12 h-12 object-contain" alt="Logo MA Syekh Abdurrahman">
                     <span class="font-bold text-xl tracking-tight text-slate-800">Portal<span class="text-blue-600">Alumni</span></span>
-                </a>
+                </div>
 
                 <div class="hidden md:flex items-center space-x-6">
-                    <a href="{{ route('public.news.index') }}" class="font-bold text-blue-600 border-b-2 border-blue-600 pb-1">Portal Berita</a>
-
                     @if (Route::has('login'))
                         @auth
                             <a href="{{ url('/dashboard') }}" class="font-bold text-white bg-blue-600 hover:bg-blue-700 px-6 py-2.5 rounded-full shadow-lg shadow-blue-600/30 transition-all hover:scale-105">
                                 Masuk ke Dashboard
                             </a>
                         @else
-                            <a href="{{ route('login') }}" class="font-semibold text-slate-600 hover:text-blue-600 px-4 py-2 transition-colors">Log in</a>
+                            <a href="{{ route('login') }}" class="font-semibold text-slate-600 hover:text-blue-600 px-4 py-2 transition-colors">Masuk</a>
 
                             @if (Route::has('register'))
                                 <a href="{{ route('register') }}" class="font-bold text-white bg-blue-600 hover:bg-blue-700 px-6 py-2.5 rounded-full shadow-lg shadow-blue-600/30 transition-all hover:scale-105">
@@ -40,6 +38,49 @@
                         @endauth
                     @endif
                 </div>
+
+                <div class="flex items-center md:hidden">
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" type="button" class="text-slate-600 hover:text-blue-600 focus:outline-none transition-colors">
+                        <svg x-show="!mobileMenuOpen" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                        <svg x-show="mobileMenuOpen" style="display: none;" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <div x-show="mobileMenuOpen" 
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0 -translate-y-2"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-150"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 -translate-y-2"
+             style="display: none;" 
+             class="md:hidden bg-white border-t border-slate-100 shadow-xl absolute w-full">
+            
+            <div class="px-4 pt-4 pb-6 space-y-3 flex flex-col">
+                @if (Route::has('login'))
+                    @auth
+                        <a href="{{ url('/dashboard') }}" class="text-center font-bold text-white bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg shadow-md transition-all">
+                            Masuk ke Dashboard
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}" class="text-center font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 px-4 py-3 rounded-lg transition-colors">
+                            Masuk
+                        </a>
+
+                        @if (Route::has('register'))
+                            <a href="{{ route('register') }}" class="text-center font-bold text-white bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg shadow-md transition-all">
+                                Daftar Sekarang
+                            </a>
+                        @endif
+                    @endauth
+                @endif
             </div>
         </div>
     </nav>
