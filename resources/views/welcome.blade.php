@@ -28,7 +28,7 @@
                                 Masuk ke Dashboard
                             </a>
                         @else
-                            <a href="{{ route('login') }}" class="font-semibold text-slate-600 hover:text-blue-600 px-4 py-2 transition-colors">Log in</a>
+                            <a href="{{ route('login') }}" class="font-semibold text-slate-600 hover:text-blue-600 px-4 py-2 transition-colors">Masuk</a>
 
                             @if (Route::has('register'))
                                 <a href="{{ route('register') }}" class="font-bold text-white bg-blue-600 hover:bg-blue-700 px-6 py-2.5 rounded-full shadow-lg shadow-blue-600/30 transition-all hover:scale-105">
@@ -71,7 +71,7 @@
                         </a>
                     @else
                         <a href="{{ route('login') }}" class="text-center font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 px-4 py-3 rounded-lg transition-colors">
-                            Log in
+                            Masuk
                         </a>
 
                         @if (Route::has('register'))

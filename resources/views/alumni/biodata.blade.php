@@ -55,13 +55,13 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                             <div>
                                 <label for="tempat_lahir" class="block text-sm font-bold text-slate-700 mb-2">Tempat Lahir</label>
-                                <input id="tempat_lahir" type="text" name="tempat_lahir" value="{{ old('tempat_lahir', $alumni->tempat_lahir ?? '') }}" required placeholder="Contoh: Pamekasan" class="block w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 bg-slate-50 focus:bg-white transition-colors" />
+                                <input id="tempat_lahir" type="text" name="tempat_lahir" value="{{ old('tempat_lahir', $alumni->tempat_lahir ?? '') }}" required placeholder="Contoh: Pamekasan" class="block w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 bg-slate-50 focus:bg-white transition-colors"  required/>
                                 <x-input-error :messages="$errors->get('tempat_lahir')" class="mt-2" />
                             </div>
 
                             <div>
                                 <label for="tanggal_lahir" class="block text-sm font-bold text-slate-700 mb-2">Tanggal Lahir</label>
-                                <input id="tanggal_lahir" type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir', $alumni->tanggal_lahir ?? '') }}" required class="block w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 bg-slate-50 focus:bg-white transition-colors" />
+                                <input id="tanggal_lahir" type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir', $alumni->tanggal_lahir ?? '') }}" required class="block w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 bg-slate-50 focus:bg-white transition-colors"  required/>
                                 <x-input-error :messages="$errors->get('tanggal_lahir')" class="mt-2" />
                             </div>
 
@@ -89,7 +89,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                             <div>
                                 <label for="nisn" class="block text-sm font-bold text-slate-700 mb-2">NISN</label>
-                                <input id="nisn" type="text" name="nisn" value="{{ old('nisn', $alumni->nisn ?? '') }}" required placeholder="Nomor Induk Siswa Nasional" class="block w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 bg-slate-50 focus:bg-white transition-colors" />
+                                <input id="nisn" type="text" name="nisn" value="{{ old('nisn', $alumni->nisn ?? '') }}" required placeholder="Nomor Induk Siswa Nasional" class="block w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 bg-slate-50 focus:bg-white transition-colors"  required/>
                                 <x-input-error :messages="$errors->get('nisn')" class="mt-2" />
                             </div>
 
@@ -108,7 +108,7 @@
 
                             <div class="md:col-span-2">
                                 <label for="major" class="block text-sm font-bold text-slate-700 mb-2">Jurusan</label>
-                                <input id="major" type="text" name="major" value="{{ old('major', $alumni->major ?? '') }}" required placeholder="Contoh: Teknik Komputer dan Jaringan" class="block w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 bg-slate-50 focus:bg-white transition-colors" />
+                                <input id="major" type="text" name="major" value="{{ old('major', $alumni->major ?? '') }}" required placeholder="Contoh: Teknik Komputer dan Jaringan" class="block w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 bg-slate-50 focus:bg-white transition-colors"  required/>
                                 <x-input-error :messages="$errors->get('major')" class="mt-2" />
                             </div>
                         </div>
@@ -121,17 +121,17 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                             <div>
                                 <label for="phone" class="block text-sm font-bold text-slate-700 mb-2">No. WhatsApp / HP</label>
-                                <input id="phone" type="text" name="phone" value="{{ old('phone', $alumni->phone ?? '') }}" placeholder="Contoh: 08123456789" class="block w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 bg-slate-50 focus:bg-white transition-colors" />
+                                <input id="phone" type="text" name="phone" value="{{ old('phone', $alumni->phone ?? '') }}" placeholder="Contoh: 08123456789" class="block w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 bg-slate-50 focus:bg-white transition-colors"  required/>
                             </div>
 
                             <div>
-                                <label for="job_title" class="block text-sm font-bold text-slate-700 mb-2">Status / Posisi Pekerjaan (Opsional)</label>
-                                <input id="job_title" type="text" name="job_title" value="{{ old('job_title', $alumni->job_title ?? '') }}" placeholder="Contoh: Mahasiswa, Guru, Staff IT" class="block w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 bg-slate-50 focus:bg-white transition-colors" />
+                                <label for="job_title" class="block text-sm font-bold text-slate-700 mb-2">Status / Posisi Pekerjaan</label>
+                                <input id="job_title" type="text" name="job_title" value="{{ old('job_title', $alumni->job_title ?? '') }}" placeholder="Contoh: Mahasiswa, Guru, Tidak Bekerja" class="block w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 bg-slate-50 focus:bg-white transition-colors" required/>
                             </div>
 
                             <div class="md:col-span-2">
-                                <label for="company" class="block text-sm font-bold text-slate-700 mb-2">Nama Instansi / Perusahaan (Opsional)</label>
-                                <input id="company" type="text" name="company" value="{{ old('company', $alumni->company ?? '') }}" placeholder="Contoh: Universitas Brawijaya / PT. Maju Jaya" class="block w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 bg-slate-50 focus:bg-white transition-colors" />
+                                <label for="company" class="block text-sm font-bold text-slate-700 mb-2">Nama Instansi / Perusahaan</label>
+                                <input id="company" type="text" name="company" value="{{ old('company', $alumni->company ?? '') }}" placeholder="Contoh: Universitas Brawijaya / PT. Maju Jaya, Tidak Bekerja" class="block w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 bg-slate-50 focus:bg-white transition-colors"  required/>
                             </div>
 
                             <div class="md:col-span-2">

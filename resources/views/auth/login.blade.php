@@ -17,14 +17,14 @@
 </div>
 
         <div>
-            <div class="flex justify-between items-center mb-2">
+            <!-- <div class="flex justify-between items-center mb-2">
                 <label for="password" class="block text-sm font-bold text-slate-700">Kata Sandi</label>
                 @if (Route::has('password.request'))
                     <a href="{{ route('password.request') }}" class="text-sm text-blue-600 hover:text-blue-800 font-bold hover:underline transition-colors">
                         Lupa sandi?
                     </a>
                 @endif
-            </div>
+            </div> -->
             <input id="password" type="password" name="password" required autocomplete="current-password" placeholder="••••••••"
                 class="block w-full px-4 py-3.5 rounded-xl border border-slate-300 text-slate-900 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors bg-slate-50 focus:bg-white placeholder-slate-400 font-medium font-mono tracking-widest" />
             <x-input-error :messages="$errors->get('password')" class="mt-2 text-red-500" />
