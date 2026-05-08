@@ -50,3 +50,20 @@
     </form>
     
 </x-guest-layout>
+
+<!-- Script SweetAlert2 (Pop-up) -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @if ($errors->has('email') || $errors->has('password'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Login Gagal!',
+                    text: '{{ $errors->first('email') ?? $errors->first('password') }}',
+                    confirmButtonColor: '#3b82f6', // Warna biru khas Tailwind
+                    confirmButtonText: 'Coba Lagi'
+                });
+            });
+        </script>
+    @endif
