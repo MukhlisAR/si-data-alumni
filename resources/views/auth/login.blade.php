@@ -2,7 +2,7 @@
     
     <div class="mb-8 text-center lg:text-left">
         <h2 class="text-3xl font-extrabold text-slate-900 mb-2">Masuk ke Akun</h2>
-        <p class="text-slate-500 text-sm font-medium">Silakan masukkan email dan kata sandi Anda.</p>
+        <p class="text-slate-500 text-sm font-medium">Silakan masukkan NISN/usernmae dan kata sandi Anda.</p>
     </div>
 
     <x-auth-session-status class="mb-4" :status="session('status')" />
