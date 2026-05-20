@@ -100,7 +100,7 @@
                     Berita & Pengumuman <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Terbaru</span>
                 </h1>
                 <p class="max-w-2xl mx-auto text-slate-500 text-lg">
-                    Ikuti terus perkembangan terbaru, kegiatan, dan informasi penting seputar alumni dan almamater.
+                    Ikuti terus perkembangan terbaru, kegiatan, dan informasi penting seputar alumni.
                 </p>
             </div>
 

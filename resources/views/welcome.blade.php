@@ -103,7 +103,7 @@
             </h1>
             
             <p class="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-white mb-10 leading-relaxed">
-                Platform resmi untuk mempererat tali silaturahmi, berbagi informasi karir, dan memperluas jaringan profesional sesama lulusan almamater tercinta.
+                Platform resmi untuk mempererat tali silaturahmi, berbagi informasi karir, dan memperluas jaringan profesional sesama lulusan sekolah tercinta.
             </p>
             
             <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
