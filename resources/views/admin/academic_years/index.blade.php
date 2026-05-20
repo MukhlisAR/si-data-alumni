@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-slate-800 leading-tight">
-            {{ __('Data Master: Tahun Angkatan') }}
+            {{ __('Data Master: Tahun Kelulusan') }}
         </h2>
     </x-slot>
 
@@ -22,11 +22,11 @@
                 <div class="md:col-span-1">
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6 text-slate-900 border-b border-slate-200">
-                            <h3 class="font-bold text-lg mb-4">Tambah Angkatan Baru</h3>
+                            <h3 class="font-bold text-lg mb-4">Tambah Kelulusan Baru</h3>
                             <form action="{{ route('admin.academic_years.store') }}" method="POST">
                                 @csrf
                                 <div class="mb-4">
-                                    <x-input-label for="year_name" :value="__('Tahun Angkatan')" />
+                                    <x-input-label for="year_name" :value="__('Tahun Kelulusan')" />
                                     <x-text-input id="year_name" class="block mt-1 w-full" type="text" name="year_name" required placeholder="Contoh: 2024 atau 2023/2024" />
                                 </div>
                                 <x-primary-button class="w-full justify-center">Simpan Data</x-primary-button>
@@ -43,7 +43,7 @@
                                     <thead class="bg-slate-50">
                                         <tr>
                                             <th class="py-3 px-4 text-left border-b text-sm font-semibold text-slate-600">No</th>
-                                            <th class="py-3 px-4 text-left border-b text-sm font-semibold text-slate-600">Tahun Angkatan</th>
+                                            <th class="py-3 px-4 text-left border-b text-sm font-semibold text-slate-600">Tahun Kelulusan</th>
                                             <th class="py-3 px-4 text-center border-b text-sm font-semibold text-slate-600">Aksi</th>
                                         </tr>
                                     </thead>
@@ -61,7 +61,7 @@
                                                     <a href="{{ route('admin.academic_years.edit', $y->id) }}" class="text-yellow-600 hover:text-yellow-800 font-bold text-sm transition-colors">Edit</a>
 
                                                     <!-- TOMBOL HAPUS (Kode Asli) -->
-                                                    <form action="{{ route('admin.academic_years.destroy', $y->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus angkatan ini?')">
+                                                    <form action="{{ route('admin.academic_years.destroy', $y->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus tahun kelulusan ini?')">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="text-red-500 hover:text-red-700 font-bold text-sm transition-colors">Hapus</button>
@@ -72,7 +72,7 @@
                                         </tr>
                                         @empty
                                         <tr>
-                                            <td colspan="3" class="py-8 text-center text-slate-500 text-sm">Belum ada data tahun angkatan yang ditambahkan.</td>
+                                            <td colspan="3" class="py-8 text-center text-slate-500 text-sm">Belum ada data tahun kelulusan yang ditambahkan.</td>
                                         </tr>
                                         @endforelse
                                     </tbody>

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-slate-800 leading-tight">
-            {{ __('Data Master: Daftar NISN Valid') }}
+            {{ __('Daftar NISN Valid') }}
         </h2>
     </x-slot>
 

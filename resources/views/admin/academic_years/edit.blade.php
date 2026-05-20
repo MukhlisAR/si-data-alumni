@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-slate-800 leading-tight">
-            {{ __('Edit Data Master: Tahun Angkatan') }}
+            {{ __('Edit Data Master: Tahun Kelulusan') }}
         </h2>
     </x-slot>
 
@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-slate-900 border-b border-slate-200">
                     
-                    <h3 class="font-bold text-lg mb-6">Ubah Tahun Angkatan</h3>
+                    <h3 class="font-bold text-lg mb-6">Ubah Tahun Kelulusan</h3>
                     
                     <!-- Form Action mengarah ke route update dan membawa $year->id -->
                     <form action="{{ route('admin.academic_years.update', $year->id) }}" method="POST">
