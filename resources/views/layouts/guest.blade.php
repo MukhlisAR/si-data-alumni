@@ -19,7 +19,7 @@
         <div class="hidden lg:flex lg:w-1/2 bg-cover bg-center p-12 text-white flex-col justify-between relative overflow-hidden" 
              style="background-image: url('{{ asset('assets/bg.webp') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;" class="relative pt-32 overflow-hidden min-h-screen flex items-center justify-center">
 
-             <div class="absolute inset-0 z-0" style="background-color: rgba(0, 0, 0, 0.8);"></div>
+             <div class="absolute inset-0 z-0" style="background-color: rgba(0, 0, 0, 0.6);"></div>
             
             
            
