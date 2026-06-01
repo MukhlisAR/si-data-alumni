@@ -16,10 +16,13 @@
     
     <div class="min-h-screen flex">
         
-        <div class="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 to-indigo-800 p-12 text-white flex-col justify-between relative overflow-hidden">
+        <div class="hidden lg:flex lg:w-1/2 bg-cover bg-center p-12 text-white flex-col justify-between relative overflow-hidden" 
+             style="background-image: url('{{ asset('assets/bg.webp') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;" class="relative pt-32 overflow-hidden min-h-screen flex items-center justify-center">
+
+             <div class="absolute inset-0 bg-black/30"></div>
             
-            <div class="absolute -top-24 -left-24 w-96 h-96 bg-white opacity-10 rounded-full blur-3xl"></div>
-            <div class="absolute bottom-10 -right-10 w-72 h-72 bg-blue-400 opacity-20 rounded-full blur-2xl"></div>
+            
+           
 
             <div class="relative z-10">
                 <div class="flex items-center gap-3 mb-12">
@@ -39,7 +42,6 @@
                 &copy; {{ date('Y') }} Sistem Informasi Alumni.
             </div>
         </div>
-
         <div class="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 relative bg-slate-50">
             
             <div class="absolute top-8 left-8 lg:hidden flex items-center gap-2">
@@ -53,7 +55,7 @@
             </div>
             
         </div>
-    </div>
+        </div>
 
 </body>
 </html>
