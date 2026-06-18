@@ -40,7 +40,7 @@ class AdminBroadcastController extends Controller
     }
 
     // ==========================================================
-    // 2. EKSEKUSI PENGIRIMAN PESAN MASSAL VIA FONNTE
+    // 2. EKSEKUSI PENGIRIMAN MASSAL (METODE SATU PER SATU / LOOPING)
     // ==========================================================
     public function send(Request $request)
     {
@@ -63,48 +63,64 @@ class AdminBroadcastController extends Controller
             return back()->withErrors(['Tidak ada target yang valid untuk dikirim.']);
         }
 
-        // 1. Siapkan Format Target Fonnte (nomor|nama, nomor|nama)
-        $targetsArray = [];
-        foreach ($alumnis as $alumni) {
-            $nama = $alumni->user->name ?? 'Alumni';
-            // Fonnte melarang ada koma di dalam nama, jadi kita ubah koma menjadi spasi
-            $namaBersih = str_replace(',', ' ', $nama);
-            
-            // Gabungkan nomor dan nama dipisah dengan garis vertikal |
-            $targetsArray[] = $alumni->phone . '|' . $namaBersih;
-        }
-
-        // Gabungkan semuanya menjadi satu teks panjang yang dipisah koma
-        $targetString = implode(',', $targetsArray);
-
-        // 2. Ubah format {name} dari user menjadi {1} sesuai aturan sistem Fonnte
-        $pesanFonnte = str_replace('{name}', '{1}', $request->message);
-
-        // Token Asli Fonnte Anda
         $token = '6eawTo3FcmEpjEovdMCx'; 
+        
+        // Siapkan variabel untuk menghitung sukses dan gagal
+        $berhasil = 0;
+        $gagal = 0;
 
-        try {
-            // 3. Tembak menggunakan format asForm() agar diakui oleh Fonnte
-            $response = Http::withoutVerifying()
-                ->asForm() // <--- KUNCI PENYELESAIAN MASALAHNYA DI SINI
-                ->withHeaders([
-                    'Authorization' => $token,
-                ])->post('https://api.fonnte.com/send', [
-                    'target' => $targetString,
-                    'message' => $pesanFonnte,
-                    'delay' => '2',
-                    'countryCode' => '62',
-                ]);
-
-            if ($response->successful() && $response->json('status') == true) {
-                return back()->with('success', 'Pesan Broadcast berhasil masuk ke antrean Fonnte untuk ' . count($targetsArray) . ' alumni!');
-            } else {
-                $pesanError = $response->json('reason') ?? $response->json('detail') ?? 'Terjadi kesalahan pada Fonnte.';
-                return back()->withErrors(['Gagal mengirim! Respon Fonnte: ' . $pesanError]);
+        foreach ($alumnis as $alumni) {
+            // 1. Bersihkan Nomor WA
+            $noWaBersih = preg_replace('/[^0-9]/', '', $alumni->phone);
+            
+            // 2. Format standar Fonnte (08...)
+            if (substr($noWaBersih, 0, 2) === '62') {
+                $noWaBersih = '0' . substr($noWaBersih, 2);
+            } elseif (substr($noWaBersih, 0, 1) === '8') {
+                $noWaBersih = '0' . $noWaBersih;
             }
 
-        } catch (\Exception $e) {
-            return back()->withErrors(['Terjadi kesalahan sistem: ' . $e->getMessage()]);
+            // Validasi: Jika nomor cukup panjang
+            if (strlen($noWaBersih) >= 10) {
+                
+                $nama = $alumni->user->name ?? 'Alumni';
+                // Ubah kata {name} secara otomatis per alumni
+                $pesanPersonal = str_replace('{name}', trim($nama), $request->message);
+
+                try {
+                    // Tembak API Fonnte SATU PER SATU
+                    $response = Http::withoutVerifying()
+                        ->asForm()
+                        ->withHeaders([
+                            'Authorization' => $token,
+                        ])->post('https://api.fonnte.com/send', [
+                            'target' => $noWaBersih,
+                            'message' => $pesanPersonal,
+                            'delay' => '2' // Delay sangat penting agar WA Anda tidak diblokir
+                        ]);
+
+                    // Jika sukses masuk Fonnte, tambah angka berhasil
+                    if ($response->successful() && $response->json('status') == true) {
+                        $berhasil++;
+                    } else {
+                        $gagal++;
+                    }
+                } catch (\Exception $e) {
+                    $gagal++;
+                }
+            } else {
+                // Jika nomor di bawah 10 digit, langsung catat sebagai gagal
+                $gagal++;
+            }
+        }
+
+        // ==========================================================
+        // EVALUASI HASIL PENGIRIMAN
+        // ==========================================================
+        if ($berhasil > 0) {
+            return back()->with('success', "Selesai! Pesan berhasil dikirim ke {$berhasil} alumni. (Gagal: {$gagal} alumni karena nomor tidak valid/tidak terdaftar WA).");
+        } else {
+            return back()->withErrors(["Gagal total! Seluruh nomor alumni pada target ini tidak valid atau ditolak oleh Fonnte."]);
         }
     }
 }
