@@ -93,14 +93,14 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             
             <div class="text-center mb-16">
-                <span class="inline-block py-1 px-3 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-sm font-semibold mb-4 shadow-sm">
+                <!-- <span class="inline-block py-1 px-3 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-sm font-semibold mb-4 shadow-sm">
                     Pusat Informasi
-                </span>
+                </span> -->
                 <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
-                    Berita & Pengumuman <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Terbaru</span>
+                    Berita & Karir <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600"></span>
                 </h1>
                 <p class="max-w-2xl mx-auto text-slate-500 text-lg">
-                    Ikuti terus perkembangan terbaru, kegiatan, dan informasi penting seputar alumni.
+                    Ikuti terus perkembangan terbaru, kegiatan, dan informasi penting seputar lembaga dan alumni.
                 </p>
             </div>
 

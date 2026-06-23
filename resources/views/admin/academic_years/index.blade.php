@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-slate-800 leading-tight">
-            {{ __('Data Master: Tahun Kelulusan') }}
+            {{ __('Tahun Kelulusan') }}
         </h2>
     </x-slot>
 
